@@ -48,7 +48,8 @@ const routes = [
                 component: UserLogin,
                 meta:{
                     title :'User Login',
-                    requiresAuth:false
+                    requiresAuth:false,
+                    disableIfLoggedIn: true
                 }
             }
         ]

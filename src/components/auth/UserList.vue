@@ -7,9 +7,9 @@
         <md-table  md-card v-if="this.Allusers.length >0">
             <md-table-toolbar>
                 <h1 class="md-title">Users</h1>
+                <b-form-input v-model="search" size="sm" style="width:200px;margin-right:5px;" class="" placeholder="Search name..."></b-form-input >
                 <router-link :to="{name:'UserRegister'}"><button class="btn btn-secondary btn-sm text-right"><i class="fas fa-plus"></i> Add New User</button></router-link>
             </md-table-toolbar>
-
             <md-table-row style="background-color:#ADD8E6;">
                 <md-table-head md-numeric>NO_</md-table-head>
                 <md-table-head>Photo</md-table-head>
@@ -22,9 +22,9 @@
                 <md-table-head>Action</md-table-head>
             </md-table-row>
 
-            <md-table-row slot="md-table-row" v-for="(user, index) in this.Allusers" :key="user.id">
+            <md-table-row slot="md-table-row" v-for="(user, index) in searchFilter" :key="user.id">
                 <md-table-cell md-numeric>{{ index+1 }}</md-table-cell>
-                <md-table-cell><img class="img" :src="'http://127.0.0.1:8000/images/users/'+user.image" alt="photo"></md-table-cell>
+                <md-table-cell><img class="img" :src="ImageURL+'/users/'+user.image" alt="photo"></md-table-cell>
                 <md-table-cell>{{ user.name }}</md-table-cell>
                 <md-table-cell>{{ user.email }}</md-table-cell>
                 <md-table-cell>{{ user.phone }}</md-table-cell>
@@ -32,8 +32,8 @@
                 <md-table-cell>{{ user.created_at | formatDate }}</md-table-cell> <!-- formatDate is a custom filter in main.js root -->
                 <md-table-cell>{{ user.updated_at | formatDate }}</md-table-cell> <!-- formatDate is a custom filter in main.js root -->
                 <md-table-cell>
-                    <b-button v-b-modal.modal @click="Edit(user.id)" size="sm" variant="info" title="Edit"><b-icon icon="file-earmark-medical"></b-icon></b-button>
-                    <b-button @click="Delete(user.id)" size="sm" variant="danger" title="Delete"><b-icon icon="trash"></b-icon></b-button>
+                    <b-button :disabled="usertype === 'User' || usertype === ''" v-b-modal.modal @click="Edit(user.id)" size="sm" variant="info" title="Edit"><b-icon icon="file-earmark-medical"></b-icon></b-button>
+                    <b-button :disabled="usertype === 'User'" v-if="usertype==='Admin'" @click="Delete(user.id)" size="sm" variant="danger" title="Delete"><b-icon icon="trash"></b-icon></b-button>
                 </md-table-cell>
             </md-table-row>
         </md-table>
@@ -90,7 +90,7 @@
                     <div class="d-flex justify-content-start">
                         <div id="preview">
                             <img v-if="preview" :src="preview" alt="">
-                            <img v-else :src="'http://127.0.0.1:8000/images/users/'+editUser.new_image" alt="">
+                            <img v-else :src="ImageURL+'/users/'+editUser.new_image" alt="">
                         </div>
                     </div>
                     <b-button variant="info" size="sm" type="submit" style="width:fit-content;margin:10px;">Update</b-button>
@@ -121,11 +121,17 @@ export default {
                 new_phone:"",
                 new_userType:"",
             },
-            preview: ""
+            preview: "",
+            search:""
         }
     },
     computed:{
         ...mapGetters('auth',['Allusers','Allerrors','Success']),
+        searchFilter(){
+            return this.Allusers.filter((item) => {
+                return item.name.toLowerCase().includes(this.search.toLowerCase());
+            });
+        }
     },
     methods:{
         ...mapActions('auth',['getUsers','deleteUsers','udpateUsers']),

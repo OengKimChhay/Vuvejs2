@@ -63,10 +63,9 @@ const category = {
                 console.log(error.response)
             })
         },
-        updateCategoies: ({commit,state}, {categoryID, formData}) => {
-            http.post("/ui/category/"+categoryID, formData)
+        updateCategoies: ({commit}, {categoryID, formData}) => {
+            http.post("/ui/category/"+categoryID, formData) //we use post req instead of put coz vue dont understand put but if we want to update we have to add 'method':'_PUT'in form data when edit
             .then((response)=>{
-                state.Errors = "";
                 console.log(response.data);
                 commit("UDATE_CATEGORY",formData);
                 commit("SUCCESS",response.data.message);

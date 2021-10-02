@@ -1,6 +1,6 @@
 <template>
 	<div class="wrappe-login"> <!--if="!isLoggedIn" this condition is hide login page if user is logged id -->
-			<div v-if="step==='login'">
+			<div v-if="step === 'login'">
 				<h3 class="text-center text-primary">Login</h3>
 				<b-alert show variant="danger" v-if="this.Loginerrors">{{this.Loginerrors}}</b-alert>
 				<b-form  @submit.prevent="onLogin" class="login">
@@ -100,18 +100,22 @@ export default {
                 re_password:"",
                 phone:"",
                 userType:"",
-                image:""
+                image:"",
             },
             preview: "",
             error:"",
         }
-    },
-
+	},
     computed:{
 		...mapGetters('auth',['Allerrors','Loginerrors','loggedIn']),
 	},
+	mounted(){ 
+		if(this.loggedIn){ //check if user is loggedin it will condition to hide login route we also project in route guard (disableIfLoggedIn) to make secure
+			this.$router.push({name:'Dashboard'});
+		}
+	},
     methods:{
-        ...mapActions('auth',['addUsers','loginUser','checkLogin']),
+        ...mapActions('auth',['addUsers','loginUser']),
         onSubmit(e){
             e.preventDefault();
             //=================append data to FormData

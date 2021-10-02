@@ -55,7 +55,7 @@
                                             <img v-if="preview" :src="preview" >
                                         </div>
                                 </div>
-                                <b-button variant="primary" size="sm" type="submit" style="width:fit-content;margin:10px;">Create</b-button>
+                                <b-button :disabled="usertype === 'User'" variant="primary" size="sm" type="submit" style="width:fit-content;margin:10px;">Create</b-button>
                             </div>
                         </b-form>
                     </div>

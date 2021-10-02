@@ -11,7 +11,7 @@
                                 <b-form-input size="sm" id="name"  v-model="category_name" type="text" placeholder="Category Name"></b-form-input>
                                 <small class="text-danger" v-if="this.Allerrors && this.Allerrors.category_name">{{this.Allerrors.category_name[0]}}</small>
                             </div>   
-                            <b-button variant="primary" size="sm" type="submit" style="width:fit-content;margin:10px;">Create</b-button>
+                            <b-button :disabled="usertype === 'User'" variant="primary" size="sm" type="submit" style="width:fit-content;margin:10px;">Create</b-button>
                         </b-form>
                     </div>
                 </div>

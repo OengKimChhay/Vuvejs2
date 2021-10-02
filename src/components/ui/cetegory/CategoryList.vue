@@ -6,6 +6,7 @@
         <md-table  md-card v-if="this.Allcategoires.length>0">
             <md-table-toolbar>
                 <h1 class="md-title">Category</h1>
+                <b-form-input v-model="search" size="sm" style="width:200px;margin-right:5px;" class="" placeholder="Search category name..."></b-form-input >
                 <router-link :to="{name:'CreateCategory'}"><button class="btn btn-secondary btn-sm text-right"><i class="fas fa-plus"></i> Add New Category</button></router-link>
             </md-table-toolbar>
 
@@ -17,14 +18,14 @@
                 <md-table-head>Action</md-table-head>
             </md-table-row>
 
-            <md-table-row slot="md-table-row" v-for="(category, index) in this.Allcategoires" :key="category.id">
+            <md-table-row slot="md-table-row" v-for="(category, index) in searchFilter" :key="category.id">
                 <md-table-cell >{{index+1}}</md-table-cell>
                 <md-table-cell >{{category.category_name}}</md-table-cell>
                 <md-table-cell >{{category.created_at | formatDate}}</md-table-cell>
                 <md-table-cell >{{category.updated_at | formatDate}}</md-table-cell>
                 <md-table-cell>
-                    <b-button v-b-modal.modal @click="Edit(category)" size="sm" variant="info" title="Edit"><b-icon icon="file-earmark-medical"></b-icon></b-button>
-                    <b-button @click="Delete(category.id)" size="sm" variant="danger" title="Delete"><b-icon icon="trash"></b-icon></b-button>
+                    <b-button :disabled="usertype === 'User'" v-b-modal.modal @click="Edit(category)" size="sm" variant="info" title="Edit"><b-icon icon="file-earmark-medical"></b-icon></b-button>
+                    <b-button :disabled="usertype === 'User'" @click="Delete(category.id)" size="sm" variant="danger" title="Delete"><b-icon icon="trash"></b-icon></b-button>
                 </md-table-cell>
             </md-table-row>
         </md-table>
@@ -63,11 +64,17 @@ export default {
     data(){
         return{
             categoryID: '',
-            category_name:''
+            category_name:'',
+            search:'',
         }
     },
     computed:{
         ...mapGetters('category',['Allcategoires','Allerrors','Success']),
+        searchFilter(){
+            return this.Allcategoires.filter((item) => {
+                return item.category_name.toLowerCase().includes(this.search.toLowerCase());
+            });
+        }
     },
     methods:{
         ...mapActions('category',['getCategoies','updateCategoies','deleteCategoies']),

@@ -2,7 +2,13 @@ import router from '../src/route/index.js';
 const mixin =  {
     data () {
         return {
-          spinnerActive: false,
+            // for spinner
+            spinnerActive: false,
+            // for user
+            username: localStorage.getItem('username'),
+            usertype: localStorage.getItem('usertype'),
+            userimage: localStorage.getItem('userimage'),
+            ImageURL: "http://127.0.0.1:8000/images"
         }
     },
     methods: {
@@ -22,7 +28,7 @@ const mixin =  {
             return router.go(1);
         }
 
-    }
+    },
 };
 export default mixin;
 //  vue mixin is an gloubal file helper to provide deverlper easy to use just import it to main.js root file

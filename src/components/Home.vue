@@ -7,20 +7,20 @@
 		<nav id="sidebar" class="sidebar-wrapper">
 			<div class="sidebar-content">
 			<div class="sidebar-brand">
-				<a href="#">pro sidebar</a>
+				<a>POS System</a>
 				<div id="close-sidebar">
 				<i class="fas fa-times"></i>
 				</div>
 			</div>
 			<div class="sidebar-header">
 				<div class="user-pic">
-				<img class="img-responsive img-rounded" src="https://raw.githubusercontent.com/azouaoui-med/pro-sidebar-template/gh-pages/src/img/user.jpg" alt="User picture">
+					<img class="img-responsive img-rounded" :src="ImageURL+'/users/'+userimage" alt="photo">
 				</div>
 				<div class="user-info">
-				<span class="user-name">Jhon
-					<strong>Smith</strong>
+				<span class="user-name">
+					<strong>{{username}}</strong>   <!--username usertype useimage get from mixin-->
 				</span>
-				<span class="user-role">Administrator</span>
+				<span class="user-role">{{usertype}}</span>
 				<span class="user-status">
 					<i class="fa fa-circle"></i>
 					<span>Online</span>
@@ -107,7 +107,6 @@
 			</a>
 			<a href="#">
 				<i class="fa fa-cog"></i>
-				<span class="badge-sonar"></span>
 			</a>
 			<a href="#">
 				<i class="fa fa-power-off"></i>
@@ -136,8 +135,7 @@ import Spinner from './spinner/Spinner.vue'
 import mixin from '../../helper/mixin.js'; //this mixin is use for reload page button above
 import Layout from '../components/layout/Layout';
 import {mapActions} from 'vuex';
-// use this import $ to use in mouted otherwice $ is not defind
-import $ from 'jquery';
+import $ from 'jquery'; // use this import $ to use in mouted otherwice $ is not defind
 export default {
 	mixins: [mixin],
 	components: { Layout,Spinner },
@@ -226,7 +224,7 @@ export default {
 	
 	@media screen and (min-width: 768px) {
 		.page-wrapper.toggled .page-content {
-		padding: 20px 20px 0 277px;
+		padding: 20px 20px 20px 277px;
 		}
 	}
 	/*----------------show sidebar button----------------*/
@@ -238,6 +236,7 @@ export default {
 		border-radius: 0 4px 4px 0px;
 		width: 35px;
 		transition-delay: 0.3s;
+		background-color: #31353D;
 	}
 	.page-wrapper.toggled #show-sidebar {
 		left: -40px;
@@ -306,9 +305,8 @@ export default {
 		float: left;
 		width: 60px;
 		padding: 2px;
-		border-radius: 12px;
+		border-radius: 5px;
 		margin-right: 15px;
-		overflow: hidden;
 	}
 	
 	.sidebar-wrapper .sidebar-header .user-pic img {
@@ -465,29 +463,6 @@ export default {
 	.sidebar-footer > a .notification {
 		position: absolute;
 		top: 0;
-	}
-	
-	.badge-sonar {
-		display: inline-block;
-		background: #980303;
-		border-radius: 50%;
-		height: 8px;
-		width: 8px;
-		position: absolute;
-		top: 0;
-	}
-	
-	.badge-sonar:after {
-		content: "";
-		position: absolute;
-		top: 0;
-		left: 0;
-		border: 2px solid #980303;
-		opacity: 0;
-		border-radius: 50%;
-		width: 100%;
-		height: 100%;
-		animation: sonar 1.5s infinite;
 	}
 	
 	/*--------------------------page-content-----------------------------*/
@@ -650,14 +625,4 @@ export default {
 		transform: rotate(0deg);
 		}
 	}	
-	@keyframes sonar {
-		0% {
-		transform: scale(0.9);
-		opacity: 1;
-		}
-		100% {
-		transform: scale(2);
-		opacity: 0;
-		}
-	}
 </style>

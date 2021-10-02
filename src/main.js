@@ -14,7 +14,6 @@ import "bootstrap/dist/js/bootstrap.min";
 import "bootstrap-vue/dist/bootstrap-vue.css";  //this is for vue bootstrap
 Vue.use(BootstrapVue);
 Vue.use(BootstrapVueIcons) //for vue icon
-
 // ------vue marteria-------------
 import VueMaterial from 'vue-material'
 import 'vue-material/dist/vue-material.min.css'
@@ -31,5 +30,5 @@ new Vue({
   store,
   router,
   guard,
-  render: h => h(home),
+  render: h => h(home)
 }).$mount('#app')

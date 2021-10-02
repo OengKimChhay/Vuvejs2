@@ -26,8 +26,9 @@
                 <md-content class="md-elevation-4" style="padding:15px; border-radius:4px;">
                     <h4>Products<i style="margin-left:5px;" class="fas fa-sitemap"></i></h4>
                     <div class="d-flex">
-                        <h5>23</h5>
+                        <h5>{{Allproducts.length}}</h5>
                     </div>
+                    <router-link :to="{name: 'ProductList'}">More info</router-link>
                 </md-content>
             </div>
         </div>
@@ -41,14 +42,17 @@ export default {
     computed:{
         ...mapGetters('auth',['Allusers']),
         ...mapGetters('category',['Allcategoires']),
+        ...mapGetters('product',['Allproducts']),
     },
     methods:{
         ...mapActions('auth',['getUsers']),
         ...mapActions('category',['getCategoies']),
+        ...mapActions('product',['getProduct']),
     },
     mounted(){
         this.getUsers();   //call this mehtod from ...mapActions if  we not mouted users will not found
         this.getCategoies();
+        this.getProduct();
     },
 }
 </script>

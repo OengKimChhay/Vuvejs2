@@ -9,7 +9,7 @@ const auth = {
         Errors: [],
         Success:"",
         Loginerror:"",
-        Token: sessionStorage.getItem('access_token') || null, //false is for to check if user not login will redirect to login route
+        Token: localStorage.getItem('access_token') || null, //false is for to check if user not login will redirect to login route
     },
     getters:{
         Allusers(state){
@@ -25,7 +25,7 @@ const auth = {
             return state.Loginerror;
         },
         loggedIn(state){
-            return state.Token === null
+            return state.Token !== null;
         }
     },
     mutations:{
@@ -47,8 +47,8 @@ const auth = {
         LOGIN_ERROR(state,erro){
             state.Loginerror = erro;
         },
-        AUTH(state,accessToken){
-            state.Token = accessToken;
+        AUTH(state,token){
+            state.Token = token;
         },
         UNAUTH(state){
             state.Token = null;
@@ -76,14 +76,11 @@ const auth = {
         },
         getUsers({commit}){
             http.get("/auth/GetUserData").then((response)=>{
-                commit("GET_USERS",response.data);
+                commit("GET_USERS",response.data); //.data mean we use ->paginate() from api so we must use .data
             })
             .catch((error)=>{
                 console.log(error.response);
             })
-        },
-        checkLogin({commit}){
-            commit('AUTH',sessionStorage.getItem('access_token'));
         },
         udpateUsers({commit}, {userID, formData, config}){
             http.post("/auth/update/"+userID, formData, config).then((response)=>{
@@ -104,33 +101,35 @@ const auth = {
             })
         },
         loginUser({commit}, formData){
-                http.post("/login",formData).then((response)=>{
-                    if(response.data.status === 'success'){
-                        //set token
-                        const token = response.data.token;
-                        sessionStorage.setItem('access_token',token);
-                        sessionStorage.setItem('user',response.data.user);
-                        commit('AUTH',token); 
-                        router.push({name:'Dashboard'});
-                        router.go();
-                    }else{
-                        commit("LOGIN_ERROR",response.data.message);
-                    }
-                })
-                .catch((error)=>{
-                    if(error){
-                        commit('UNAUTH');
-                        sessionStorage.removeItem('access_token');
-                        sessionStorage.removeItem('user');
-                        commit("GET_ERRORS",error.response.data.errors);
-                    }
-                });
+            http.post("/login",formData).then((response)=>{
+                if(response.data.status === 'success'){
+                    //set token
+                    const token = response.data.token;
+                    localStorage.setItem('access_token',token);
+                    localStorage.setItem('username',response.data.user.name);
+                    localStorage.setItem('usertype',response.data.user.userType);
+                    localStorage.setItem('userimage',response.data.user.image);
+                    commit('AUTH',token); 
+                    router.push({name:'Dashboard'});
+                    router.go();
+                }else{
+                    commit("LOGIN_ERROR",response.data.message);
+                }
+            })
+            .catch((error)=>{
+                if(error){
+                    commit('UNAUTH');
+                    localStorage.removeItem('access_token');
+                    localStorage.removeItem('user');
+                    commit("GET_ERRORS",error.response.data.errors);
+                }
+            });
         },
         logoutUser({commit}){
                 http.post("/auth/logout").then((response)=>{
                     if(response.data.status === "success"){
-                        sessionStorage.removeItem('access_token');
-                        sessionStorage.removeItem('user');
+                        localStorage.removeItem('access_token');
+                        localStorage.removeItem('user');
                         commit('UNAUTH');
                         router.push({name:'Login'});
                         window.location.reload();
@@ -140,8 +139,8 @@ const auth = {
                 })
                 .catch((error)=>{
                     if(error){
-                        sessionStorage.removeItem('access_token');
-                        sessionStorage.removeItem('user');
+                        localStorage.removeItem('access_token');
+                        localStorage.removeItem('user');
                         commit('UNAUTH');
                         commit("GET_ERRORS",error.response.data.errors);
                     }
@@ -163,4 +162,6 @@ const auth = {
         }
     },
 }
-export default auth
+
+
+export default auth;
