@@ -1,3 +1,4 @@
+this project is use vue js 2 with laravel 8 api
 # vue_user
 
 ## Project setup
