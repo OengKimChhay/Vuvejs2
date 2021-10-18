@@ -15,7 +15,7 @@ const mixin =  {
         // for show and hide spinner loading 
         showSpinner(){
             this.spinnerActive = true;
-            setTimeout(() => { this.spinnerActive = false; }, 1500);
+            setTimeout(() => { this.spinnerActive = false; }, 1000);
         },
         // for pages reload next previous
         pageReload(){

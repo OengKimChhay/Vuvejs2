@@ -32,8 +32,8 @@
                 <md-table-cell>{{ user.created_at | formatDate }}</md-table-cell> <!-- formatDate is a custom filter in main.js root -->
                 <md-table-cell>{{ user.updated_at | formatDate }}</md-table-cell> <!-- formatDate is a custom filter in main.js root -->
                 <md-table-cell>
-                    <b-button :disabled="usertype === 'User' || usertype === ''" v-b-modal.modal @click="Edit(user.id)" size="sm" variant="info" title="Edit"><b-icon icon="file-earmark-medical"></b-icon></b-button>
-                    <b-button :disabled="usertype === 'User'" v-if="usertype==='Admin'" @click="Delete(user.id)" size="sm" variant="danger" title="Delete"><b-icon icon="trash"></b-icon></b-button>
+                    <b-button :disabled="usertype === 'User'" v-b-modal.modal @click="Edit(user.id)" size="sm" variant="info" title="Edit"><b-icon icon="file-earmark-medical"></b-icon></b-button>
+                    <b-button :disabled="usertype === 'User'" @click="Delete(user.id)" size="sm" variant="danger" title="Delete"><b-icon icon="trash"></b-icon></b-button>
                 </md-table-cell>
             </md-table-row>
         </md-table>
@@ -89,8 +89,8 @@
                     </div>
                     <div class="d-flex justify-content-start">
                         <div id="preview">
-                            <img v-if="preview" :src="preview" alt="">
-                            <img v-else :src="ImageURL+'/users/'+editUser.new_image" alt="">
+                            <img class="preview" v-if="preview" :src="preview" alt="">
+                            <img class="preview" v-else :src="ImageURL+'/users/'+editUser.new_image" alt="">
                         </div>
                     </div>
                     <b-button variant="info" size="sm" type="submit" style="width:fit-content;margin:10px;">Update</b-button>
@@ -188,7 +188,7 @@ export default {
 #preview{
     width: 70%;
 }
-img{
+.preview{
     width: 100%;
 }
 .img{

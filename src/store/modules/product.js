@@ -6,12 +6,16 @@ const auth = {
     namespaced: true,
     state:{
         Products: [],
+        Allproducts:[],
         Errors: [],
         Success:"",
     },
     getters:{
         Allproducts(state){
             return state.Products;
+        },
+        GetAllproducts(state){
+            return state.Allproducts;
         },
         Allerrors(state){
             return state.Errors;
@@ -29,6 +33,9 @@ const auth = {
         },
         GET_PRODUCT(state,product){
             state.Products = product;
+        },
+        GET_ALL_PRODUCT(state,allproduct){
+            state.Allproducts = allproduct;
         },
         GET_ERRORS(state,error){
             state.Errors = error;
@@ -58,11 +65,19 @@ const auth = {
                 }
             })
         },
-        getProduct({commit}){
-            http.get("/ui/product").then((response)=>{
-                commit("GET_PRODUCT",response.data); //.data mean we use ->paginate() from api so we must use .data
+        getProduct({commit},page){ //this method is get product with pagiantion for dispaly in product list
+            http.get("/ui/product?page="+ page).then((response)=>{
+                commit("GET_PRODUCT",response.data); 
             })
-            .catch((error)=>{
+            .catch((error)=>{ 
+                console.log(error.response);
+            })
+        },
+        getAllProduct({commit}){ //this method is get all product for display in pos
+            http.get("/ui/allproduct").then((response)=>{
+                commit("GET_ALL_PRODUCT",response.data); 
+            })
+            .catch((error)=>{ 
                 console.log(error.response);
             })
         },

@@ -4,9 +4,9 @@
         <!-- and router-view plz see in layout/layout -->
         
         <h5 class="title">Product List <i class="fa fa-users"></i></h5>
-        <md-table  md-card v-if="this.Allproducts.length >0">
+        <md-table  md-card v-if="this.Allproducts.data.length > 0"> <!--//.data mean we use ->paginate() from api so we must use .data appent to response.data -->
             <md-table-toolbar>
-                <h1 class="md-title">Products</h1>
+                <h1 class="md-title">Product: {{this.Allproducts.total}}</h1> <!-- .total is getting from laravel pagination api-->
                 <b-form-input v-model="search"  size="sm" style="width:200px;margin-right:5px;" class="" placeholder="Search product name..."></b-form-input >
                 <router-link :to="{name:'CreateProduct'}"><button class="btn btn-secondary btn-sm text-right"><i class="fas fa-plus"></i> Add New Product</button></router-link>
             </md-table-toolbar>
@@ -21,14 +21,14 @@
                 <md-table-head>Action</md-table-head>
             </md-table-row>
 
-            <md-table-row slot="md-table-row" v-for="(product, index) in searchFilter" :key="product.id">
+            <md-table-row slot="md-table-row" v-for="(product, index) in searchProduct " :key="product.id">
                 <md-table-cell md-numeric>{{index+1}}</md-table-cell>
                 <md-table-cell><img class="img" :src="ImageURL+'/product/'+product.image" alt="photo"></md-table-cell>
-                <md-table-cell>{{product.product_name}}</md-table-cell>
+                <md-table-cell>{{product.product_name | capitaLize}}</md-table-cell>
                 <md-table-cell>{{product.unitprice}} $</md-table-cell>
                 <md-table-cell>
                     <div v-for="cat in Allcategoires" :key="cat.id">
-                        <div  v-if="cat.id == product.category_id">{{cat.category_name}}</div>
+                        <div  v-if="cat.id == product.category_id">{{cat.category_name | capitaLize}}</div>
                     </div>
                 </md-table-cell>
                 <md-table-cell>{{ product.created_at | formatDate }}</md-table-cell> <!-- formatDate is a custom filter in main.js root -->
@@ -38,9 +38,27 @@
                     <b-button :disabled="usertype === 'User'" @click="Delete(product.id)" size="sm" variant="danger" title="Delete"><b-icon icon="trash"></b-icon></b-button>
                 </md-table-cell>
             </md-table-row>
+            <md-table-row v-if="this.searchProduct.length <=0">
+                <h5 class="m-2 text-center">No Product.</h5>
+            </md-table-row>
         </md-table>
-
-        <md-table md-card v-if="this.Allproducts.length == 0">
+    <!-- pagination -->
+        <div class="m-5 d-flex justify-content-around align-items-center">
+            <div v-if="this.Allproducts.total > this.Allproducts.per_page"> 
+                <!-- .total and .per_page are getting from laravel api -->
+                <b-button style="margin-right:10px;" pill variant="outline-primary" size="sm" @click="prePage"><b-icon icon="chevron-double-left"></b-icon>Previouse</b-button>
+                <b-button pill variant="outline-primary" size="sm" @click="nextPage">Next<b-icon icon="chevron-double-right"></b-icon></b-button>
+            </div>
+            <!-- inter page num go to specify page -->
+            <div>
+                <b-form-input @input="pageNumber" type="number" min="1" size="sm" placeholder="Enter Page Num" title="Enter page number you prefer to"></b-form-input>
+            </div>
+            <div>
+                <p style="margin: 0;font-size: 12px;color: #606060;">Page {{this.Allproducts.current_page}} of {{this.Allproducts.last_page}}</p>
+            </div>
+        </div>
+    <!-- end pagination -->
+        <md-table md-card v-if="this.Allproducts.data.length <=0"> <!--//.data mean we use ->paginate() from api so we must use .data appent to response.data -->
             <md-table-toolbar>
                 <h1 class="md-title">No Product</h1><router-link :to="{name:'CreateProduct'}"><button class="btn btn-secondary btn-sm text-right">Add New Product</button></router-link>
             </md-table-toolbar>
@@ -75,8 +93,8 @@
                     </div>
                     <div class="d-flex justify-content-start">
                         <div id="previewImg">
-                            <img v-if="preview" :src="preview" alt="">
-                            <img v-else :src="ImageURL+'/product/'+editProduct.new_image" alt="">
+                            <img class="preview" v-if="preview" :src="preview" alt="">
+                            <img class="preview" v-else :src="ImageURL+'/product/'+editProduct.new_image" alt="">
                         </div>
                     </div>
                     <b-button :disabled="usertype === 'User'" variant="primary" size="sm" type="submit" style="width:fit-content;margin:10px;">Update</b-button>
@@ -97,6 +115,7 @@ export default {
     mixins: [Mixin],
     data(){
         return{
+            page:1,
             editProduct:{
                 id:"",
                 new_product_name:"",
@@ -111,8 +130,8 @@ export default {
     computed:{
         ...mapGetters('product',['Allproducts','Success','Allerrors']),
         ...mapGetters('category',['Allcategoires']),
-        searchFilter(){
-            return this.Allproducts.filter((item) => {
+        searchProduct(){
+            return this.Allproducts.data.filter((item) => { //.data mean we use ->paginate() from api so we must use .data appent to response.data -->
                 return item.product_name.toLowerCase().includes(this.search.toLowerCase());
             });
         }
@@ -121,7 +140,7 @@ export default {
         ...mapActions('product',['getProduct','udpateProducts','deleteProducts']),
         ...mapActions('category',['getCategoies']),
         Edit(productID){
-            const secificProduct = this.Allproducts.find(product=> product.id === productID); //to get old value of data to show when user click edit
+            const secificProduct = this.Allproducts.data.find(product=> product.id === productID); //to get old value of data to show when user click edit
             this.editProduct.id = secificProduct.id;
             this.editProduct.new_product_name = secificProduct.product_name;
             this.editProduct.new_unitprice= secificProduct.unitprice;
@@ -141,21 +160,51 @@ export default {
                 }        
             }
             this.udpateProducts({productID,formData,config});    // use this if we dont use mapAction this.$store.dispatch('auth/udpateUsers',{userID,formData,config})           
-            // this.showSpinner(); 
+            this.showSpinner(); 
         },
         Delete(productID){
             if(confirm("Are your sure want to delete this product?")){
                 this.deleteProducts(productID);
                 this.showSpinner(); //to show spinnser we call showSpinner and hideSpinnser functions from mixin that we import above
             }
-            
         },
         processFile(event) {
             this.editProduct.new_image = event.target.files[0];
             this.preview = URL.createObjectURL(this.editProduct.new_image);
+        },
+        nextPage(){
+            if(this.page >= this.Allproducts.last_page ){
+                // .last_page is getting from laravel api
+                this.page = this.Allproducts.last_page;
+                this.getProduct(this.page); // this.getProduct(this.page) getProduct function has payload pls see product.js in store
+            }else{
+                this.page+=1;
+                this.getProduct(this.page); // this.getProduct(this.page) getProduct function has payload pls see product.js in store
+            }
+        },
+        prePage(){
+            if(this.page <=1){
+                this.page = 1;
+                this.getProduct(this.page);
+            }else{
+                this.page-=1;
+                this.getProduct(this.page);
+            }
+        },
+        pageNumber(num){
+            if(num <=1){
+                this.page = 1;
+                this.getProduct(this.page);
+            }else if(num >= this.Allproducts.last_page){
+                this.page = this.Allproducts.last_page;
+                this.getProduct(this.page);
+            }else{
+                this.page = num;
+                this.getProduct(this.page);
+            }
         }
     },
-    mounted(){
+    mounted(){ 
         this.getProduct();
         this.getCategoies();
     },
@@ -168,7 +217,7 @@ export default {
 #preview{
     width: 70%;
 }
-img{
+.preview{
     width: 100%;
 }
 .img{

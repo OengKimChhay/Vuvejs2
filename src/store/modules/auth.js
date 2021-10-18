@@ -129,7 +129,9 @@ const auth = {
                 http.post("/auth/logout").then((response)=>{
                     if(response.data.status === "success"){
                         localStorage.removeItem('access_token');
-                        localStorage.removeItem('user');
+                        localStorage.removeItem('username');
+                        localStorage.removeItem('usertype');
+                        localStorage.removeItem('userimage');
                         commit('UNAUTH');
                         router.push({name:'Login'});
                         window.location.reload();

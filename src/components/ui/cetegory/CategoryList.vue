@@ -37,7 +37,7 @@
         </md-table>
 
         <!-- =====================showign modal vue bootstrap for update user================== -->
-        <b-modal id="modal" hide-footer title="Update User">
+        <b-modal id="modal" hide-footer title="Update Category">
             <b-alert show variant="success" v-if="this.Success">{{this.Success}}</b-alert>
             <b-form @submit.prevent="Update(categoryID)">
                 <div>
@@ -45,7 +45,7 @@
                     <b-form-input size="sm" id="name"  v-model="category_name" type="text" placeholder="New Category Name"></b-form-input>
                     <small class="text-danger" v-if="this.Allerrors && this.Allerrors.category_name">{{this.Allerrors.category_name[0]}}</small>  
                 </div>   
-                <b-button variant="primary" size="sm" type="submit" style="width:fit-content;margin:10px;">Create</b-button>
+                <b-button variant="primary" size="sm" type="submit" style="width:fit-content;margin:10px;">Update</b-button>
             </b-form>
         </b-modal>
         <!-- ======================showing spinner========================= -->

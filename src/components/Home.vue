@@ -49,6 +49,12 @@
 				<li class="sidebar-dropdown">
 					<router-link :to="{ name: 'Dashboard' } "><i class="fa fa-tachometer-alt"></i><span>Dashboard</span></router-link>
 				</li>
+				<li class="sidebar-dropdown">
+					<router-link :to="{ name: 'Pos' } ">
+					<i class="fas fa-file"></i>
+					<span>POS</span>
+					</router-link>
+				</li>
 				<li class="sidebar-dropdown arrow">
 					<a href="#">
 					<i class="fa fa-users"></i>
