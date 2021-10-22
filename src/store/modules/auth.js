@@ -55,10 +55,11 @@ const auth = {
         }
     },
     actions:{
-        addUsers({commit},formData,config){
+        addUsers({commit,state},formData,config){
             http.post("/register",formData,config).then((response)=>{
                 if(response.data.status ==='success'){
                     commit("ADD_USER",formData); //we have to commit data otherwise formData won't be pass to route 
+                    state.Errors="";
                     commit('SUCCESS',response.data.message);
                     setTimeout(function(){
                         router.push({name: 'UserList'});
@@ -82,9 +83,10 @@ const auth = {
                 console.log(error.response);
             })
         },
-        udpateUsers({commit}, {userID, formData, config}){
+        udpateUsers({commit,state}, {userID, formData, config}){
             http.post("/auth/update/"+userID, formData, config).then((response)=>{
                 if(response.data.status ==='success'){
+                    state.Errors="";
                     commit("UPDATE_USERS",formData);
                     commit('SUCCESS',response.data.message);
                     setTimeout(function(){
@@ -109,6 +111,7 @@ const auth = {
                     localStorage.setItem('username',response.data.user.name);
                     localStorage.setItem('usertype',response.data.user.userType);
                     localStorage.setItem('userimage',response.data.user.image);
+                    console.log()
                     commit('AUTH',token); 
                     router.push({name:'Dashboard'});
                     router.go();
@@ -148,9 +151,10 @@ const auth = {
                     }
                 });
         },
-        deleteUsers({commit},userID){
+        deleteUsers({commit,state},userID){
             http.delete("/auth/delete/"+userID).then((response)=>{
                 if(response.data.status === 'success'){
+                    state.Errors="";
                     commit("SUCCESS",response);
                     router.go(); //to reload page
                 }

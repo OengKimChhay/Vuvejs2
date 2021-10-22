@@ -4,19 +4,19 @@ import router from '@/route/index';
 const category = {
     namespaced: true,
     state:{
-        Categories: [],
+        Tables:[],
         Errors: [],
         Success:"",
     },
     mutations:{
-        ADD_CATEGORY:(state,data)=>{
-            state.Categories = data;
+        ADD_TABLE:(state,data)=>{
+            state.Tables = data;
         },
-        GET_CATEGORY:(state,data)=>{
-            state.Categories = data;
+        GET_TABLE:(state,data)=>{
+            state.Tables = data;
         },
-        UDATE_CATEGORY:(state,data)=>{
-            state.Categories = data;
+        UPDATE_TABLE:(state,data)=>{
+            state.Tables = data;
         },
         GET_ERRORS:(state,error)=>{
             state.Errors = error;
@@ -26,15 +26,15 @@ const category = {
         }
     },
     actions:{
-        addCategoies: ({commit,state},formData) =>{
-            http.post("/ui/category",formData)
+        addTables: ({commit,state},formData) =>{
+            http.post("/ui/table",formData)
             .then((response)=>{
                 if(response.data.status ==='success'){
                     state.Errors = "";
-                    commit("ADD_CATEGORY",formData); //we have to commit data otherwise formData won't be pass to route 
+                    commit("ADD_TABLE",formData); //we have to commit data otherwise formData won't be pass to route 
                     commit("SUCCESS",response.data.message);
                     setTimeout(function(){
-                        router.push({name: 'CategoryList'}); 
+                        router.push({name: 'TableList'}); 
                         window.location.reload();//reload page after go to another route;
                     },3000);
                 }else if(response.data.status ==='fail'){
@@ -48,11 +48,10 @@ const category = {
                 }
             })
         },
-        deleteCategoies: ({commit,state},catID) =>{
-            http.delete("/ui/category/"+catID)
+        deleteTables: ({commit,state},tableID) =>{
+            http.delete("/ui/table/"+tableID)
             .then((response)=>{
                 state.Errors = "";
-                console.log(response.data);
                 commit("SUCCESS",response.data.message);
                 router.go(); //to reload page
                 
@@ -61,11 +60,11 @@ const category = {
                 console.log(error.response)
             })
         },
-        updateCategoies: ({commit,state}, {categoryID, formData}) => {
-            http.post("/ui/category/"+categoryID, formData) //we use post req instead of put coz vue dont understand put but if we want to update we have to add 'method':'_PUT'in form data when edit
+        updateTables: ({commit,state}, {tableID, formData}) => {
+            http.post("/ui/table/"+tableID, formData) //we use post req instead of put coz vue dont understand put but if we want to update we have to add 'method':'_PUT'in form data when edit
             .then((response)=>{
                 state.Errors = "";
-                commit("UDATE_CATEGORY",formData);
+                commit("UDATE_TABLE",formData);
                 commit("SUCCESS",response.data.message);
                 setTimeout(function(){
                     window.location.reload(); //to reload page
@@ -78,19 +77,19 @@ const category = {
                 }
             })
         },
-        getCategoies: ({commit}) =>{
-            http.get("/ui/category")
+        getTables: ({commit}) =>{
+            http.get("/ui/table")
             .then((response)=>{
-                commit("GET_CATEGORY",response.data);
+                commit("GET_TABLE",response.data);
             })
             .catch((error)=>{
-                console.log(error)
+                console.log(error.response)
             })
         },
     },
     getters:{
-        Allcategoires: (state) => {
-            return state.Categories;
+        Alltables: (state) => {
+            return state.Tables;
         },
         Allerrors: (state) => {
             return state.Errors;

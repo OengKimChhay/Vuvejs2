@@ -8,6 +8,9 @@ import CategoryList from '@/components/ui/cetegory/CategoryList.vue';
 import CreateCategory from '@/components/ui/cetegory/CreateCategory.vue';
 // pos=========================================
 import Pos from '@/components/ui/pos/Pos.vue';
+// table======================================
+import TableList from '@/components/ui/table/TableList.vue';
+import CreateTable from '@/components/ui/table/CreateTable.vue';
 
 const routes =  [  
     { 
@@ -74,5 +77,28 @@ const routes =  [
             }
         ]
     }, 
+    {
+        path: '/table',
+        component: Layout,
+        children:[
+            {
+                path: '',
+                name: 'TableList',
+                component: TableList,
+                meta:{
+                    title: 'Table',
+                    requiresAuth: true
+                }
+            },{
+                path: 'create',
+                name: 'CreateTable',
+                component: CreateTable,
+                meta:{
+                    title: 'Create Table',
+                    requiresAuth: true
+                }
+            },
+        ]
+    },
 ]; 
 export default routes;

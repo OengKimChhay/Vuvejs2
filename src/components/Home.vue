@@ -91,6 +91,18 @@
 					</ul>
 					</div>
 				</li>
+				<li class="sidebar-dropdown arrow">
+					<a href="#">
+					<i class="fas fa-list"></i>
+					<span>Table</span>
+					</a>
+					<div class="sidebar-submenu">
+					<ul>
+						<li><router-link :to="{ name: 'CreateTable' }">Create</router-link></li>
+						<li><router-link :to="{ name: 'TableList' }">Listing</router-link></li>
+					</ul>
+					</div>
+				</li>
 				<li class="sidebar-dropdown">
 					<a href="#" @click="Logout()">
 					<i class="fas fa-sign-out-alt"></i>

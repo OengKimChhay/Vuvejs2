@@ -41,7 +41,6 @@ export default {
             var curMonth = months[date.getMonth()];
             var curYear = date.getFullYear();
             this.date = curWeekDay+"/"+curDay+"/"+curMonth+"/"+curYear
-
             setTimeout(this.showTime,1000);
         },
     },

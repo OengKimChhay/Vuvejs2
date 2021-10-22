@@ -25,7 +25,7 @@
                 <md-table-cell md-numeric>{{index+1}}</md-table-cell>
                 <md-table-cell><img class="img" :src="ImageURL+'/product/'+product.image" alt="photo"></md-table-cell>
                 <md-table-cell>{{product.product_name | capitaLize}}</md-table-cell>
-                <md-table-cell>{{product.unitprice}} $</md-table-cell>
+                <md-table-cell>{{product.unitprice | toCurrency}}</md-table-cell>
                 <md-table-cell>
                     <div v-for="cat in Allcategoires" :key="cat.id">
                         <div  v-if="cat.id == product.category_id">{{cat.category_name | capitaLize}}</div>
