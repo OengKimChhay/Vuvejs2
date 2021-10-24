@@ -1,7 +1,12 @@
 <template>
     <div class="wrappe-order">
         <div class="go-back">
-            <router-link :to="{ name: 'Dashboard' }" style="text-decoration:none;" ><p><b-icon icon="arrow-bar-left"></b-icon>Exit</p></router-link>
+            <button>
+                <router-link :to="{ name: 'Dashboard' }" style="text-decoration:none;padding:7px;color: #910101;" ><b-icon icon="arrow-bar-left"></b-icon>Exit</router-link>
+            </button>
+            <button>
+                Promotion
+            </button>
         </div>
         <div style="display:flex;width:100%; padding: 0 13px;">
             <section>
@@ -62,14 +67,16 @@
                 <div class="menu-option">
                     <button v-on:click="orderItems=[]">Clear Order</button>
                     <button v-on:click="showTable=true">Table</button>
-                    <button v-if="showProList || showTable" @click="Back" size="sm"><b-icon icon="chevron-double-left"></b-icon> Back</button>
+                    <button v-on:click="showPromoTable=true">Promotion %</button>
+                    <button v-if="showProList || showTable || showPromoTable" @click="Back" size="sm"><b-icon icon="chevron-double-left"></b-icon> Back</button>
                 </div>
-                <TableOrder v-if="showTable" :table="this.Alltables" @passTable="selectTab"></TableOrder>
                 <!-- we use prop(pass from parent to child) and $emit(pass child to parent) to pass data each other child~parent -->
+                <TableOrder v-if="showTable" :table="this.Alltables" @passTable="selectTab"></TableOrder>
                 <!-- ------------------show category list--------------- -->
                 <Category v-if="showCatList" :category="this.Allcategoires" @PassCatID="selectCat"></Category> 
                 <!-- ------------------product show base on category -->
                 <Product  v-if="showProList" :product="this.GetAllproducts" :category_id="this.category_id" @PassProduct="TakeOrder"></Product>
+                <Promotion v-if="showPromoTable"></Promotion>
             </section>
         </div>
     </div>
@@ -82,6 +89,7 @@ import Clock from '../../../../helper/clock';
 import TableOrder from "./listing/Table";
 import Category from './listing/Category';
 import Product from './listing/Product';
+import Promotion from './listing/Promotion';
 export default {
     mixins: [Mixin],
     name:'Pos',
@@ -90,6 +98,7 @@ export default {
         TableOrder,
         Category, 
         Product,
+        Promotion
     },
     data(){
         return{
@@ -98,8 +107,9 @@ export default {
             showCatList: true,
             showProList: false,
             showTable: false,
+            showPromoTable: false,
             orderItems:[],
-            discount:10
+            discount:0,
         }
     },
     computed:{
@@ -128,6 +138,7 @@ export default {
             this.showCatList = true;
             this.showProList = false;
             this.showTable   = false;
+            this.showPromoTable = false;
         },
         selectTab(table){
             this.table = table.name;
@@ -237,19 +248,20 @@ button.delete-order{
     background: #93b4ff;
     margin-bottom: 15px;
     box-shadow: 0px 0px 3px 0px #808080;
+    display: flex;
 }
-
-.go-back p{
-    box-shadow: inset 0px 0px 5px black;
+.go-back button{
+    box-shadow: 0px 1px 4px 0px #000000;
     background: white;
     font-size: 17px;
-    margin: 0;
-    color: #910101;
+    margin-right: 13px;
     font-weight: 500;
-    width: fit-content;
-    padding: 8px;
+    color: #3c3c3c;
+    border-radius: 2px;
+    padding: 7px;
+    border: none;
 }
-.go-back p:hover{
+.go-back button:hover{
     background: #dddddd;
 }
 .wrappe-order{
