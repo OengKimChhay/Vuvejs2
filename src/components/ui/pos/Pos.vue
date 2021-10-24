@@ -61,10 +61,10 @@
                 <p class="title">Menu</p>
                 <div class="menu-option">
                     <button v-on:click="orderItems=[]">Clear Order</button>
-                    <button v-on:click="showTable=true">Table</button>
-                    <button v-if="showProList || showTable" @click="Back" size="sm"><b-icon icon="chevron-double-left"></b-icon> Back</button>
+                    <button v-on:click="showTable">Table</button>
+                    <button v-if="showProList || showTables" @click="Back" size="sm"><b-icon icon="chevron-double-left"></b-icon> Back</button>
                 </div>
-                <TableOrder v-if="showTable" :table="this.Alltables" @passTable="selectTab"></TableOrder>
+                <TableOrder v-if="showTables" :table="this.Alltables" @passTable="selectTab"></TableOrder>
                 <!-- we use prop(pass from parent to child) and $emit(pass child to parent) to pass data each other child~parent -->
                 <!-- ------------------show category list--------------- -->
                 <Category v-if="showCatList" :category="this.Allcategoires" @PassCatID="selectCat"></Category> 
@@ -97,7 +97,7 @@ export default {
             category_id: '',
             showCatList: true,
             showProList: false,
-            showTable: false,
+            showTables: false,
             orderItems:[],
             discount:10
         }
@@ -127,7 +127,12 @@ export default {
         Back(){
             this.showCatList = true;
             this.showProList = false;
-            this.showTable   = false;
+            this.showTables   = false;
+        },
+        showTable(){
+            this.showTables = true;
+            this.showCatList = false;
+            this.showProList = false;
         },
         selectTab(table){
             this.table = table.name;
@@ -227,7 +232,7 @@ button.delete-order{
     justify-content: center;
     align-items: center;
     background-color: #93b4ff;
-    box-shadow: 0px 1px 4px 0px #000000;
+    box-shadow: 0px 1px 3px 0px #000000
 }
 .menu-option button:hover{
     outline: 2px solid #a1a1a1;
