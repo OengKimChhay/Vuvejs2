@@ -62,6 +62,7 @@ export default {
                 product_name:"",
                 category_id:"",
                 unitprice:"",
+                image:""
             },
 			preview: "",
 			error:"",
@@ -92,7 +93,6 @@ export default {
             }
             this.addProduct(formData,config);
             this.showSpinner(); //to show spinnser we call showSpinner and hideSpinnser functions from mixin that we import above
-        
         },
         processFile(event) {
             this.product.image = event.target.files[0];

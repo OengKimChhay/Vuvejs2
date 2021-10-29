@@ -1,6 +1,5 @@
 
 import http from '@/axiosAPI/axios.js';
-import router from '@/route/index';
 const category = {
     namespaced: true,
     state:{
@@ -34,9 +33,8 @@ const category = {
                     commit("ADD_TABLE",formData); //we have to commit data otherwise formData won't be pass to route 
                     commit("SUCCESS",response.data.message);
                     setTimeout(function(){
-                        router.push({name: 'TableList'}); 
                         window.location.reload();//reload page after go to another route;
-                    },3000);
+                    },2000);
                 }else if(response.data.status ==='fail'){
                     commit("GET_ERRORS",response.data.message);
                 }
@@ -53,7 +51,9 @@ const category = {
             .then((response)=>{
                 state.Errors = "";
                 commit("SUCCESS",response.data.message);
-                router.go(); //to reload page
+                setTimeout(function(){
+                    window.location.reload();//reload page after go to another route;
+                },2000);
                 
             })
             .catch((error)=>{
@@ -67,8 +67,8 @@ const category = {
                 commit("UDATE_TABLE",formData);
                 commit("SUCCESS",response.data.message);
                 setTimeout(function(){
-                    window.location.reload(); //to reload page
-                },3000);
+                    window.location.reload();//reload page after go to another route;
+                },2000);
             })
             .catch((error)=>{
                 if(error){

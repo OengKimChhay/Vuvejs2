@@ -1,6 +1,5 @@
 
 import http from '@/axiosAPI/axios.js';
-import router from '@/route/index';
 
 const auth = {
     namespaced: true,
@@ -51,9 +50,8 @@ const auth = {
                     commit("ADD_PRODUCT",formData); //we have to commit data otherwise formData won't be pass to route 
                     commit('SUCCESS',response.data.message);
                     setTimeout(function(){
-                        router.push({name: 'ProductList'});
                         window.location.reload();
-                    },3000);
+                    },2000);
                 }else{
                     commit("GET_ERRORS",response.data.message);
                 }
@@ -88,7 +86,7 @@ const auth = {
                     commit('SUCCESS',response.data.message);
                     setTimeout(function(){
                         window.location.reload(); //to reload page
-                    },3000);
+                    },1500);
                 }else{
                     commit("GET_ERRORS",response.data.message);
                 }

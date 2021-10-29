@@ -17,11 +17,20 @@ Vue.filter('capitaLize', function (value) {
   value = value.toString()
   return value.charAt(0).toUpperCase() + value.slice(1)
 })
-// format currency .00
+// format currency .00 $
 Vue.filter('toCurrency', function (value) {
   var formatter = new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: 'USD',
+      minimumFractionDigits: 2
+  });
+  return formatter.format(value);
+});
+// format current ៛
+Vue.filter('toCurrencyReil', function (value) {
+  var formatter = new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'KHR',
       minimumFractionDigits: 2
   });
   return formatter.format(value);

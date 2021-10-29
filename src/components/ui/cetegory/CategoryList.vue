@@ -20,7 +20,7 @@
 
             <md-table-row slot="md-table-row" v-for="(category, index) in searchFilter" :key="category.id">
                 <md-table-cell >{{index+1}}</md-table-cell>
-                <md-table-cell >{{category.category_name}}</md-table-cell>
+                <md-table-cell >{{category.category_name | capitaLize}}</md-table-cell>
                 <md-table-cell >{{category.created_at | formatDate}}</md-table-cell>
                 <md-table-cell >{{category.updated_at | formatDate}}</md-table-cell>
                 <md-table-cell>

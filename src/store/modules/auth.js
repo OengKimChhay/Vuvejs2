@@ -62,9 +62,8 @@ const auth = {
                     state.Errors="";
                     commit('SUCCESS',response.data.message);
                     setTimeout(function(){
-                        router.push({name: 'UserList'});
                         window.location.reload();
-                    },3000);
+                    },2000);
                 }else{
                     commit("GET_ERRORS",response.data.message);
                 }
@@ -91,7 +90,7 @@ const auth = {
                     commit('SUCCESS',response.data.message);
                     setTimeout(function(){
                         window.location.reload(); //to reload page
-                    },3000);
+                    },2000);
                 }else{
                     commit("GET_ERRORS",response.data.message);
                 }
